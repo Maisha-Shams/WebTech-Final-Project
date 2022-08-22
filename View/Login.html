@@ -1,0 +1,72 @@
+<html>
+
+<head>
+  <title>Login</title>
+  <link rel="stylesheet" href="../Asset/LoginStyle.css" />
+</head>
+
+<body>
+ 
+    <div class="wrapper">
+      <div class="title">Login</div>
+
+      <div class="inputfield">
+        <label>Email Address </label>
+        <input type="email" value="" name="email" class="input" id="email" placeholder="Enter Your Account Number" required />
+      </div>
+
+      <div class="inputfield">
+        <label>Password</label>
+        <input type="password" value="" name="password" class="input" id="password" placeholder="Enter your password" required />
+      </div>
+
+      <div class="inputfield">
+        <input class="btn" type="button" name="" value="login" onclick="loginCheck()" />
+      </div>
+      <div class="inputfield">
+        <p>Dont have an account?</p>
+        <a href="../View/Registration.php">SignUp</a>
+      </div>
+    </div>
+ 
+</body>
+
+<script>
+
+  
+const email = document.getElementById('email');
+const password = document.getElementById('password');
+
+function loginCheck() {
+  console.log(email);
+  const emailValue = email.value;
+  const passwordValue = password.value;
+  if (emailValue === null && passwordValue === null) {
+    alert('Please Enter your account Number and Password');
+  } else {
+    const loginCredentials = { email: emailValue, password: passwordValue };
+
+    const json = JSON.stringify(loginCredentials);
+
+    let xhttp = new XMLHttpRequest();
+
+    xhttp.open('POST', '../controller/LoginCheck.php', true);
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        if (this.responseText == 'success') {
+          window.location.href = '../View/UserHome.php?email=' + emailValue;
+        } else if (this.responseText == 'failed') {
+          alert('Invalid Credentials');
+        } else if (this.responseText == 'null') {
+          alert('null');
+        }
+      }
+    };
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhttp.send('data=' + json);
+  }
+}
+
+</script>
+
+</html>
